@@ -1,8 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"math"
+	"os"
+	"strconv"
+	"strings"
 )
 
 /***
@@ -10,6 +14,13 @@ Given a positive integer, get the list of all the previous prime numbers
 ***/
 func main() {
 	var n = 1571
+
+	var inputErr error
+	n, inputErr = askForConsoleInpunt()
+	if inputErr != nil {
+		fmt.Println("Error reading input:", inputErr)
+		return
+	}
 
 	primes := getPrimeNumbers(n)
 
@@ -53,4 +64,23 @@ func getNextPrime(prime int, flags []bool) int {
 		next++
 	}
 	return next
+}
+
+func askForConsoleInpunt() (int, error) {
+	reader := bufio.NewReader(os.Stdin)
+
+	fmt.Println("Provide a positive integer")
+
+	text, rerr := reader.ReadString('\n')
+	if rerr != nil {
+		return 0, rerr
+	}
+
+	text = strings.TrimSpace(text)
+
+	n, parseErr := strconv.Atoi(text)
+	if parseErr != nil {
+		return 0, parseErr
+	}
+	return n, nil
 }
